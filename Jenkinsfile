@@ -14,7 +14,6 @@ pipeline {
             steps {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
-                    docker compose down
                     cd ${directory}
                     git pull origin ${branch}
                     exit
