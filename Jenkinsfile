@@ -38,10 +38,9 @@ pipeline {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
-                    docker run --name test_fe -p 3000:3000 -d ${image}:latest
+                    docker run --name iansinambela/li-be -p 5000:5000 -d ${image}
                     wget --no-verbose --tries=1 --spider localhost:3000
-                    docker stop test_fe
-                    docker rm test_fe
+                    docker stop iansinambela/li-be
                     exit
                     EOF'''
                 }
