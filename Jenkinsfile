@@ -2,17 +2,18 @@ pipeline {
     agent any
     environment{
         credential = 'paul'
-        server = 'paul@103.175.219.100'
-        directory = '/home/paul/literature-backend'
+        server = '103.175.219.100'
+	port = '1234'       
+	directory = '/home/paul/literature-backend'
         branch = 'main'
         service = 'backend'
-        image = 'iansinambela/backend'
+        image = 'iansinambela/li-be'
     }
     stages {
         stage('Pull code dari repository'){
             steps {
                 sshagent([credential]) {
-                    sh '''ssh -o StrictHostKeyChecking=no -p1234  ${server} << EOF 
+                    sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     docker compose down
                     cd ${directory}
                     git pull origin ${branch}
@@ -24,7 +25,7 @@ pipeline {
         stage('Building application'){
             steps {
                 sshagent([credential]) {
-                    sh '''ssh -o StrictHostKeyChecking=no -p1234 ${server} << EOF 
+                    sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
                     docker compose  up -d database
                     docker build -t ${image}:env.BUILD_NUMBER .
@@ -36,7 +37,7 @@ pipeline {
         stage('Testing application'){
             steps {
                 sshagent([credential]) {
-                    sh '''ssh -o StrictHostKeyChecking=no -p1234 ${server} << EOF 
+                    sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
                     docker run --name test_fe -p 3000:3000 -d ${image}:latest
                     wget --no-verbose --tries=1 --spider localhost:3000
@@ -53,7 +54,7 @@ pipeline {
             }
             steps {
                 sshagent([credential]) {
-                    sh '''ssh -o StrictHostKeyChecking=no -p1234 ${server} << EOF
+                    sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF
                     docker compose up -d 
                     cd ${directory}
                     exit
@@ -64,7 +65,7 @@ pipeline {
         stage('Push image to docker hub'){
             steps {
                 sshagent([credential]) {
-                    sh '''ssh -o StrictHostKeyChecking=no -p1234 ${server} << EOF 
+                    sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
                     docker push ${image}:latest
                     exit
