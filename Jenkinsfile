@@ -7,7 +7,7 @@ pipeline {
 	directory = '/home/paul/literature-backend'
         branch = 'main'
         service = 'backend'
-        image = 'iansinambela/li-be'
+        image = 'iansinambela/li-be:latest'
     }
     stages {
         stage('Pull code dari repository'){
