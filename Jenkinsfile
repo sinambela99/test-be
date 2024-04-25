@@ -27,7 +27,7 @@ pipeline {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
                     docker compose  up -d database
-                    docker build -t ${image}:env.BUILD_NUMBER .
+                    docker build -t ${image} .
                     exit
                     EOF'''
                 }
