@@ -40,7 +40,7 @@ pipeline {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
                     docker run --name be -p 5000:5000 -d ${image}
-                    wget --no-verbose --tries=1 --spider localhost:3000
+                    wget --no-verbose --tries=1 --spider localhost:5000
                     docker stop be
 		    docker rm be
                     exit
