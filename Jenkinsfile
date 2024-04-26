@@ -67,7 +67,7 @@ pipeline {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
-                    docker push ${image}:latest
+                    docker push ${image}
                     exit
                     EOF'''
                 }
@@ -75,9 +75,8 @@ pipeline {
         }
 	
 	
-      post {
-         always {
-             script {
+        stage('send notification to discord'){
+            steps {
                 discordSend description: "backend notify", footer: "ian notify", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "https://discord.com/api/webhooks/1232551770614665298/xQdk4sfscxduagJVQ6gdpN1aYAXCIKr-D_L2fALi9pc0qUdcDNTMgq_vHzrxPxpOT-4V"
             }
         }
