@@ -79,7 +79,6 @@ pipeline {
             steps {
                 discordSend description: "backend notify", 
 		footer: "ian notify",
-		thumbnail: discordImage,
 		link: env.BUILD_URL, 
 		result: currentBuild.currentResult,
                 successful: currentBuild.resultIsBetterOrEqualTo('SUCCESS'), 
