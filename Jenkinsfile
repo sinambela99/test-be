@@ -14,7 +14,8 @@ pipeline {
             steps {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
-                    cd ${directory}
+                    docker compose down backend
+		    cd ${directory}
                     git pull origin ${branch}
                     exit
                     EOF'''
@@ -66,7 +67,7 @@ pipeline {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no -p ${port} paul@${server} << EOF 
                     cd ${directory}
-                    docker push ${image}
+                    docker push ${image}:latest
                     exit
                     EOF'''
                 }
